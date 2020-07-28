@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import format from 'date-fns/fp/format';
 
 type Vehicle = 'motorcycle' | 'struck' | 'mtruck';
 
@@ -6,7 +7,7 @@ interface GetPriceParams {
 	booth: boolean;
 	carry: boolean;
 	locations: string[][]; //[['latitude (optional)', 'longitude (optional)', 'google maps address (required)', 'address extra info (floor/suite optional)']]
-	pickup_time: string; //"2019/10/25 00:00"
+	pickup_time: Date; // javascript date -> "2019/10/25 00:00"
 	vehicle: Vehicle; //(motorcycle\struck\mtruck)
 }
 
@@ -15,8 +16,8 @@ interface GetPriceRequest {
 	password: string;
 	data: {
 		order: {
-			booth: boolean;
-			carry: boolean;
+			booth: string; //"true" | "false"
+			carry: string; //"true" | "false"
 			locations: string[][]; //[['latitude (optional)', 'longitude (optional)', 'google maps address (required)', 'address extra info (floor/suite optional)']]
 			pickup_time: string; //"2019/10/25 00:00"
 			vehicle: Vehicle; //(motorcycle\struck\mtruck)
@@ -65,7 +66,7 @@ interface CreateOrderParams {
 	need_insulation_bags: boolean;
 	note: string;
 	phone_number: string;
-	pickup_time: string; //"2019/10/25 00:00"
+	pickup_time: Date; // javascript date -> "2019/10/25 00:00"
 	receiver_name: string;
 	receiver_phone_number: string;
 	vehicle: Vehicle;
@@ -202,6 +203,7 @@ export default class Gogovanplus {
 	}
 
 	getPrice = async (params: GetPriceParams) => {
+		const { booth, carry, pickup_time, ...restParams } = params;
 		try {
 			return await this.client.get<GetPriceRequest, GetPriceResponse>(
 				'api/order/price',
@@ -209,7 +211,14 @@ export default class Gogovanplus {
 					params: {
 						email: this.email,
 						password: this.password,
-						...params,
+						data: {
+							order: {
+								booth: !!booth ? 'true' : 'false',
+								carry: !!carry ? 'true' : 'false',
+								pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
+								...restParams,
+							},
+						},
 					},
 				}
 			);
@@ -223,13 +232,28 @@ export default class Gogovanplus {
 	};
 
 	createOrder = async (params: CreateOrderParams) => {
+		const {
+			booth,
+			carry,
+			need_insulation_bags,
+			pickup_time,
+			...restParams
+		} = params;
 		try {
 			return await this.client.post<CreateOrderRequest, CreateOrderResponse>(
 				'api/order/new',
 				{
 					email: this.email,
 					password: this.password,
-					...params,
+					data: {
+						order: {
+							booth: !!booth ? 'true' : 'false',
+							carry: !!carry ? 'true' : 'false',
+							need_insulation_bags: !!need_insulation_bags ? 'true' : 'false',
+							pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
+							...restParams,
+						},
+					},
 				}
 			);
 		} catch (error) {
