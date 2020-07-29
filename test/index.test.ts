@@ -17,7 +17,7 @@ const sampleGetPrice = {
 		['', '', '台灣台北市中山區松江路9號', '2樓'],
 		['25.0463042', '121.5331887', '台灣台北市中山區松江路9號', ''],
 	],
-	pickup_time: addMinutes(60)(new Date()),
+	pickup_time: addMinutes(2000)(new Date()),
 	vehicle: 'motorcycle' as 'motorcycle',
 };
 
@@ -53,7 +53,7 @@ describe('order api', () => {
 	it('should get price', async () => {
 		try {
 			const res = await gogovan.getPrice(sampleGetPrice);
-			console.log(JSON.stringify(res, null, 2));
+			console.log('get price', JSON.stringify(res.data, null, 2));
 			expect(res.data.success).toBe(true);
 		} catch (error) {
 			console.log(error);
@@ -66,7 +66,7 @@ describe('order api', () => {
 	it('should create order', async () => {
 		try {
 			const res = await gogovan.createOrder(sampleCreateOrder);
-			console.log(JSON.stringify(res, null, 2));
+			console.log('create order', JSON.stringify(res.data, null, 2));
 			if (res.data.success) {
 				orderId = res.data.order_id;
 			}
@@ -84,7 +84,7 @@ describe('order api', () => {
 		};
 		try {
 			const res = await gogovan.cancelOrder(sampleCancel);
-			console.log(JSON.stringify(res, null, 2));
+			console.log('cancel order', JSON.stringify(res.data, null, 2));
 			expect(res.data.success).toBe(true);
 		} catch (error) {
 			console.log(error);
@@ -95,7 +95,7 @@ describe('order api', () => {
 	it('should get order status', async () => {
 		try {
 			const res = await gogovan.getOrderStatus(prevOrderId);
-			console.log(JSON.stringify(res, null, 2));
+			console.log('get order status', JSON.stringify(res.data, null, 2));
 			expect(res.data.id).toBe(parseInt(prevOrderId, 10));
 		} catch (error) {
 			console.log(error);
@@ -105,10 +105,10 @@ describe('order api', () => {
 });
 
 describe('wallet api', () => {
-	it('should dget wallet balance', async () => {
+	it('should get wallet balance', async () => {
 		try {
 			const res = await gogovan.getWalletBalance();
-			console.log(JSON.stringify(res, null, 2));
+			console.log('get wallet balance', JSON.stringify(res.data, null, 2));
 			expect(res.data.success).toBe(true);
 		} catch (error) {
 			console.log(error);

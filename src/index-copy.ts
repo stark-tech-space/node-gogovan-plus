@@ -1,4 +1,3 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import phin from 'phin';
 import format from 'date-fns/fp/format';
 
@@ -26,7 +25,7 @@ interface GetPriceRequest {
 	};
 }
 
-interface GetPriceResponse extends AxiosResponse {
+interface GetPriceResponse {
 	data: {
 		success: boolean;
 		msg: string;
@@ -102,7 +101,7 @@ interface CreateOrderRequest {
 	};
 }
 
-interface CreateOrderResponse extends AxiosResponse {
+interface CreateOrderResponse {
 	data: {
 		success: boolean;
 		order_id: number;
@@ -122,7 +121,7 @@ interface CancelOrderRequest {
 	order_id: string;
 }
 
-interface CancelOrderResponse extends AxiosResponse {
+interface CancelOrderResponse {
 	data: {
 		success: boolean;
 		msg: string | undefined;
@@ -145,7 +144,7 @@ interface Waypoint {
 	driver_arrived_at: string; //date isoString
 }
 
-interface GetOrderStatusResponse extends AxiosResponse {
+interface GetOrderStatusResponse {
 	data: {
 		id: number;
 		status: 'pending' | 'picked' | 'active' | 'completed' | 'cancelled';
@@ -167,7 +166,7 @@ interface GetWalletBalanceRequest {
 	password: string;
 }
 
-interface GetWalletBalanceResponse extends AxiosResponse {
+interface GetWalletBalanceResponse {
 	data: {
 		success: boolean;
 		msg: string | null;
@@ -195,43 +194,15 @@ export default class Gogovanplus {
 	private email: string;
 	private password: string;
 	private baseURL: string;
-	private client: AxiosInstance;
+
 	constructor(newEmail: string, newPassword: string, endpointURL: string) {
 		this.email = newEmail;
 		this.password = newPassword;
 		this.baseURL = endpointURL;
-		this.client = axios.create({
-			baseURL: endpointURL,
-		});
 	}
 
-	getPrice = async (params: GetPriceParams) => {
-		const { booth, carry, pickup_time, ...restParams } = params;
-		const url = `${this.baseURL}/api/order/price`;
-		const data = {
-			email: this.email,
-			password: this.password,
-			data: {
-				order: {
-					booth: !!booth ? 'true' : 'false',
-					carry: !!carry ? 'true' : 'false',
-					pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
-					...restParams,
-				},
-			},
-		};
-		try {
-			const resGetPrice = await phin({
-				url,
-				data,
-				parse: 'json',
-				timeout: 10000,
-			});
-			return { ...resGetPrice, data: resGetPrice.body };
-			return await this.client.get<GetPriceRequest, GetPriceResponse>(
-				'api/order/price',
-				{
-					params: {
+	/*
+	{
 						email: this.email,
 						password: this.password,
 						data: {
@@ -242,9 +213,30 @@ export default class Gogovanplus {
 								...restParams,
 							},
 						},
-					},
-				}
-			);
+					}
+	*/
+
+	getPrice = async (params: GetPriceParams) => {
+		const { booth, carry, pickup_time, ...restParams } = params;
+		const url = this.baseURL + '/api/order/price';
+		const data = {
+			order: {
+				email: this.email,
+				password: this.password,
+				data: {
+					booth: booth.toString(),
+					carry: carry.toString(),
+					pickup_time: format('yyyy/M/dd HH:mm')(pickup_time),
+					...restParams,
+				},
+			},
+		};
+		try {
+			return await phin({
+				url,
+				data,
+				parse: 'json',
+			});
 		} catch (error) {
 			if (error && error.response) {
 				return error.response;
@@ -262,23 +254,27 @@ export default class Gogovanplus {
 			pickup_time,
 			...restParams
 		} = params;
+		const url = this.baseURL + '/api/order/new';
+		const data = {
+			email: this.email,
+			password: this.password,
+			data: {
+				order: {
+					booth: 'false',
+					carry: 'false',
+					need_insulation_bags: !!need_insulation_bags ? 'true' : 'false',
+					pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
+					...restParams,
+				},
+			},
+		};
 		try {
-			return await this.client.post<CreateOrderRequest, CreateOrderResponse>(
-				'api/order/new',
-				{
-					email: this.email,
-					password: this.password,
-					data: {
-						order: {
-							booth: !!booth ? 'true' : 'false',
-							carry: !!carry ? 'true' : 'false',
-							need_insulation_bags: !!need_insulation_bags ? 'true' : 'false',
-							pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
-							...restParams,
-						},
-					},
-				}
-			);
+			return await phin({
+				url,
+				method: 'POST',
+				data,
+				parse: 'json',
+			});
 		} catch (error) {
 			if (error && error.response) {
 				return error.response;
@@ -289,15 +285,19 @@ export default class Gogovanplus {
 	};
 
 	cancelOrder = async (params: CancelOrderParams) => {
+		const url = this.baseURL + '/api/order/cancel';
+		const data = {
+			email: this.email,
+			password: this.password,
+			...params,
+		};
 		try {
-			return await this.client.put<CancelOrderRequest, CancelOrderResponse>(
-				'api/order/cancel',
-				{
-					email: this.email,
-					password: this.password,
-					...params,
-				}
-			);
+			return await phin({
+				url,
+				method: 'PUT',
+				data,
+				parse: 'json',
+			});
 		} catch (error) {
 			if (error && error.response) {
 				return error.response;
@@ -308,15 +308,16 @@ export default class Gogovanplus {
 	};
 
 	getOrderStatus = async (id: string) => {
+		const url = this.baseURL + `/api/order/${id}/status`;
+		const data = {
+			email: this.email,
+			password: this.password,
+		};
 		try {
-			return await this.client.get<
-				GetOrderStatusRequest,
-				GetOrderStatusResponse
-			>(`api/order/${id}/status`, {
-				params: {
-					email: this.email,
-					password: this.password,
-				},
+			return await phin({
+				url,
+				data,
+				parse: 'json',
 			});
 		} catch (error) {
 			if (error && error.response) {
@@ -328,15 +329,16 @@ export default class Gogovanplus {
 	};
 
 	getWalletBalance = async () => {
+		const url = this.baseURL + '/api/wallet-balance';
+		const data = {
+			email: this.email,
+			password: this.password,
+		};
 		try {
-			return await this.client.get<
-				GetWalletBalanceRequest,
-				GetWalletBalanceResponse
-			>('api/wallet-balance', {
-				params: {
-					email: this.email,
-					password: this.password,
-				},
+			return await phin({
+				url,
+				data,
+				parse: 'json',
 			});
 		} catch (error) {
 			if (error && error.response) {
