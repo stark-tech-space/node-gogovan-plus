@@ -26,25 +26,23 @@ interface GetPriceRequest {
 }
 
 interface GetPriceResponse {
+	success: boolean;
+	msg: string;
 	data: {
-		success: boolean;
-		msg: string;
-		data: {
-			breakdown: {
-				fee: {
-					title: string;
-					value: number;
-				};
+		breakdown: {
+			fee: {
+				title: string;
+				value: number;
 			};
-			distance_in_kms: string;
-			travel_time: string; //seconds
-			base: number;
-			total: number;
-			payment_method: string;
-			wallet: {
-				amount: string;
-				bonus: string;
-			};
+		};
+		distance_in_kms: string;
+		travel_time: string; //seconds
+		base: number;
+		total: number;
+		payment_method: string;
+		wallet: {
+			amount: string;
+			bonus: string;
 		};
 	};
 }
@@ -102,11 +100,10 @@ interface CreateOrderRequest {
 }
 
 interface CreateOrderResponse {
-	data: {
-		success: boolean;
-		order_id: number;
-		price: number;
-	};
+	success: boolean;
+	order_id: number;
+	price: number;
+	msg?: string;
 }
 
 interface CancelOrderParams {
@@ -122,10 +119,8 @@ interface CancelOrderRequest {
 }
 
 interface CancelOrderResponse {
-	data: {
-		success: boolean;
-		msg: string | undefined;
-	};
+	success: boolean;
+	msg: string | undefined;
 }
 
 interface GetOrderStatusRequest {
@@ -145,20 +140,20 @@ interface Waypoint {
 }
 
 interface GetOrderStatusResponse {
-	data: {
+	id: number;
+	status: 'pending' | 'picked' | 'active' | 'completed' | 'cancelled';
+	name: string;
+	phone_number: string;
+	driver: {
 		id: number;
-		status: 'pending' | 'picked' | 'active' | 'completed' | 'cancelled';
-		name: string;
 		phone_number: string;
-		driver: {
-			id: number;
-			phone_number: string;
-			name: string;
-			license_plate: string;
-			location: string | undefined; //"25.0737746,121.6007978"
-		};
-		waypoints: [Waypoint];
+		name: string;
+		license_plate: string;
+		location: string | undefined; //"25.0737746,121.6007978"
 	};
+	waypoints: [Waypoint];
+	success?: boolean; //error
+	msg?: string; //error message
 }
 
 interface GetWalletBalanceRequest {
@@ -167,12 +162,10 @@ interface GetWalletBalanceRequest {
 }
 
 interface GetWalletBalanceResponse {
-	data: {
-		success: boolean;
-		msg: string | null;
-		amount: number;
-		bonus: number;
-	};
+	success: boolean;
+	msg: string | null;
+	amount: number;
+	bonus: number;
 }
 
 export interface OrderStatusWebhookRequest<Array> {
@@ -231,13 +224,12 @@ export default class Gogovanplus {
 			},
 		};
 		try {
-			const res = await phin({
+			const res = await phin<GetPriceResponse>({
 				url,
 				data,
 				parse: 'json',
 				timeout: 10000,
 			});
-
 			if (res.body.hasOwnProperty('success') && !res.body?.success) {
 				throw res.body.msg;
 			}
@@ -275,7 +267,7 @@ export default class Gogovanplus {
 			},
 		};
 		try {
-			const res = await phin({
+			const res = await phin<CreateOrderResponse>({
 				url,
 				method: 'POST',
 				data,
@@ -305,7 +297,7 @@ export default class Gogovanplus {
 			...params,
 		};
 		try {
-			const res = await phin({
+			const res = await phin<CancelOrderResponse>({
 				url,
 				method: 'PUT',
 				data,
@@ -333,7 +325,7 @@ export default class Gogovanplus {
 			password: this.password,
 		};
 		try {
-			const res = await phin({
+			const res = await phin<GetOrderStatusResponse>({
 				url,
 				data,
 				parse: 'json',
@@ -361,7 +353,7 @@ export default class Gogovanplus {
 			password: this.password,
 		};
 		try {
-			const res = await phin({
+			const res = await phin<GetWalletBalanceResponse>({
 				url,
 				data,
 				parse: 'json',

@@ -1,5 +1,5 @@
 {
-	"name": "gogovan-plus",
+	"name": "@uteam-tw/gogovan-plus",
 	"version": "1.0.0",
 	"description": "gogovan plus api wrapper",
 	"main": "./lib/index.js",
@@ -23,7 +23,7 @@
 		"gogovan-plus",
 		"api"
 	],
-	"author": "Jimmy Chan <jimmychan55@gmail.com> (https://github.com/skylinezum)",
+	"author": "uteam-tw (https://github.com/uteam-tw)",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/uteam-tw/node-gogovan-plus/issues"
@@ -43,7 +43,6 @@
 		"typescript": "^3.9.7"
 	},
 	"dependencies": {
-		"axios": "^0.19.2",
 		"phin": "^3.5.0"
 	}
 }
