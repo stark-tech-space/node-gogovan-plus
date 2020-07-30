@@ -53,8 +53,8 @@ describe('order api', () => {
 	it('should get price', async () => {
 		try {
 			const res = await gogovan.getPrice(sampleGetPrice);
-			console.log('get price', JSON.stringify(res.data, null, 2));
-			expect(res.data.success).toBe(true);
+			console.log('get price', JSON.stringify(res, null, 2));
+			expect(res.success).toBe(true);
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -66,11 +66,11 @@ describe('order api', () => {
 	it('should create order', async () => {
 		try {
 			const res = await gogovan.createOrder(sampleCreateOrder);
-			console.log('create order', JSON.stringify(res.data, null, 2));
-			if (res.data.success) {
-				orderId = res.data.order_id;
+			console.log('create order', JSON.stringify(res, null, 2));
+			if (res.success) {
+				orderId = res.order_id;
 			}
-			expect(res.data.success).toBe(true);
+			expect(res.success).toBe(true);
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -84,8 +84,8 @@ describe('order api', () => {
 		};
 		try {
 			const res = await gogovan.cancelOrder(sampleCancel);
-			console.log('cancel order', JSON.stringify(res.data, null, 2));
-			expect(res.data.success).toBe(true);
+			console.log('cancel order', JSON.stringify(res, null, 2));
+			expect(res.success).toBe(true);
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -95,8 +95,8 @@ describe('order api', () => {
 	it('should get order status', async () => {
 		try {
 			const res = await gogovan.getOrderStatus(prevOrderId);
-			console.log('get order status', JSON.stringify(res.data, null, 2));
-			expect(res.data.id).toBe(parseInt(prevOrderId, 10));
+			console.log('get order status', JSON.stringify(res, null, 2));
+			expect(res.id).toBe(parseInt(prevOrderId, 10));
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -108,8 +108,8 @@ describe('wallet api', () => {
 	it('should get wallet balance', async () => {
 		try {
 			const res = await gogovan.getWalletBalance();
-			console.log('get wallet balance', JSON.stringify(res.data, null, 2));
-			expect(res.data.success).toBe(true);
+			console.log('get wallet balance', JSON.stringify(res, null, 2));
+			expect(res.success).toBe(true);
 		} catch (error) {
 			console.log(error);
 			throw error;
