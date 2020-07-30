@@ -22,3 +22,6 @@ jobs:
         run: npm test
         env:
           CI: true
+          API_EMAIL: ${{ secrets.GOGOVAN_TEST_EMAIL }}
+          API_PASSWORD: ${{ secrets.GOGOVAN_TEST_PW }}
+          API_ENDPOINT: ${{ secrets.GOGOVAN_TEST_URL }}

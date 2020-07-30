@@ -152,7 +152,6 @@ interface GetOrderStatusResponse {
 		location: string | undefined; //"25.0737746,121.6007978"
 	};
 	waypoints: [Waypoint];
-	success?: boolean; //error
 	msg?: string; //error message
 }
 
@@ -332,7 +331,7 @@ export default class Gogovanplus {
 				timeout: 10000,
 			});
 
-			if (res.body.hasOwnProperty('success') && !res.body?.success) {
+			if (res.body.hasOwnProperty('msg')) {
 				throw res.body.msg;
 			}
 
