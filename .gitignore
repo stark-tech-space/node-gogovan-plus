@@ -105,7 +105,6 @@ dist
 
 # Package Build Directories
 lib
-dist
 
 # Test Files
 test.json

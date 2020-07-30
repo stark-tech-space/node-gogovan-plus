@@ -2,15 +2,17 @@
 	"name": "@uteam-tw/gogovan-plus",
 	"version": "1.0.0",
 	"description": "gogovan plus api wrapper",
-	"main": "./lib/index.js",
+	"main": "./lib/src/index.js",
 	"scripts": {
+		"prepublish": "npm run build",
 		"type-check": "tsc --noEmit",
 		"type-check:watch": "npm run type-check -- --watch",
 		"build": "npm run build:types && npm run build:js",
+		"prebuild": "rm -r ./lib || true",
 		"build:types": "tsc --emitDeclarationOnly",
-		"build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
+		"build:js": "babel src --out-dir lib/src --extensions \".ts,.tsx\" --source-maps inline",
 		"prestart": "npm run build:types",
-		"start": "babel src --watch --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
+		"start": "babel src --watch --out-dir lib/src --extensions \".ts,.tsx\" --source-maps inline",
 		"test": "jest"
 	},
 	"repository": {
