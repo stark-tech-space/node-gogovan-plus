@@ -1,6 +1,6 @@
 {
 	"name": "@uteam-tw/gogovan-plus",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "gogovan plus api wrapper",
 	"main": "./lib/src/index.js",
 	"scripts": {
