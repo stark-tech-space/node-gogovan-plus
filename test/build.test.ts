@@ -1,4 +1,4 @@
-import Gogovanplus from '../lib/src';
+import Gogovanplus from '../lib';
 import dotenv from 'dotenv';
 
 dotenv.config();
