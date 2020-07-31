@@ -13,7 +13,8 @@
 		"build:js": "babel src --out-dir lib/src --extensions \".ts,.tsx\" --source-maps inline",
 		"prestart": "npm run build:types",
 		"start": "babel src --watch --out-dir lib/src --extensions \".ts,.tsx\" --source-maps inline",
-		"test": "jest"
+		"test": "jest",
+		"pretest": "npm run build"
 	},
 	"repository": {
 		"type": "git",
@@ -45,6 +46,8 @@
 		"typescript": "^3.9.7"
 	},
 	"dependencies": {
-		"phin": "^3.5.0"
+		"@types/regenerator-runtime": "^0.13.0",
+		"phin": "^3.5.0",
+		"regenerator-runtime": "^0.13.7"
 	}
 }

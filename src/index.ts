@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime';
 import phin from 'phin';
 import format from 'date-fns/fp/format';
 
