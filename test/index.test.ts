@@ -55,6 +55,8 @@ describe('order api', () => {
 			const res = await gogovan.getPrice(sampleGetPrice);
 			console.log('get price', JSON.stringify(res, null, 2));
 			expect(res.success).toBe(true);
+			expect(res.msg).toBeDefined();
+			expect(res.data).toBeDefined();
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -71,6 +73,8 @@ describe('order api', () => {
 				orderId = res.order_id;
 			}
 			expect(res.success).toBe(true);
+			expect(res.order_id).toBeDefined();
+			expect(res.price).toBeDefined();
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -97,6 +101,9 @@ describe('order api', () => {
 			const res = await gogovan.getOrderStatus(prevOrderId);
 			console.log('get order status', JSON.stringify(res, null, 2));
 			expect(res.id).toBe(parseInt(prevOrderId, 10));
+			expect(res.status).toBeDefined();
+			expect(res.name).toBeDefined();
+			expect(res.phone_number).toBeDefined();
 		} catch (error) {
 			console.log(error);
 			throw error;
@@ -110,6 +117,7 @@ describe('wallet api', () => {
 			const res = await gogovan.getWalletBalance();
 			console.log('get wallet balance', JSON.stringify(res, null, 2));
 			expect(res.success).toBe(true);
+			expect(res.amount).toBeDefined();
 		} catch (error) {
 			console.log(error);
 			throw error;
