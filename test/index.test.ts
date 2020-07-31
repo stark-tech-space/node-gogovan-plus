@@ -65,7 +65,7 @@ describe('order api', () => {
 
 	let orderId = '';
 
-	it('should create order', async () => {
+	it.skip('should create order', async () => {
 		try {
 			const res = await gogovan.createOrder(sampleCreateOrder);
 			console.log('create order', JSON.stringify(res, null, 2));
@@ -81,7 +81,7 @@ describe('order api', () => {
 		}
 	});
 
-	it('should cancel order', async () => {
+	it.skip('should cancel order', async () => {
 		const sampleCancel = {
 			action: 'cancel' as 'cancel',
 			order_id: orderId,
