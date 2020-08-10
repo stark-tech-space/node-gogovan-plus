@@ -218,7 +218,7 @@ export default class Gogovanplus {
 				order: {
 					booth: booth.toString(),
 					carry: carry.toString(),
-					pickup_time: format('yyyy/M/dd HH:mm')(pickup_time),
+					pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
 					...restParams,
 				},
 			},

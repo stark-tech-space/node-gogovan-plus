@@ -24,7 +24,7 @@ const sampleGetPrice = {
 const sampleCreateOrder = {
 	booth: false,
 	carry: false,
-	cod_price: '',
+	cod_price: '250',
 	invoice: {
 		address: '',
 		email: '',
@@ -34,23 +34,34 @@ const sampleCreateOrder = {
 	},
 	is_bonus_first: false,
 	locations: [
-		['', '', '台灣台北市中山區松江路9號', '2樓'],
-		['25.0463042', '121.5331887', '台灣台北市中山區松江路9號', ''],
+		[
+			/*'25.032987', '121.54508',*/ '',
+			'',
+			'台北市大安區敦化南路一段337號8樓',
+			'8F',
+		],
+		[
+			,
+			/*'25.0330787', '121.5450698',*/ '',
+			'',
+			'106台北市大安區信義路四段88號',
+			'8F',
+		],
 	],
-	name: 'Test Sender',
+	name: '法理歐',
 	need_insulation_bags: false,
-	note: 'Bring everything to the door',
-	phone_number: '123',
+	note: '',
+	phone_number: '+88622272399',
 	pickup_time: addMinutes(60)(new Date()),
-	receiver_name: 'Test Receiver',
-	receiver_phone_number: '123',
+	receiver_name: 'Frank Su Jhih Wei',
+	receiver_phone_number: '+886955940336',
 	vehicle: 'motorcycle' as 'motorcycle',
 };
 
 const prevOrderId = '13791';
 
 describe('order api', () => {
-	it('should get price', async () => {
+	it.skip('should get price', async () => {
 		try {
 			const res = await gogovan.getPrice(sampleGetPrice);
 			console.log('get price', JSON.stringify(res, null, 2));
@@ -65,7 +76,7 @@ describe('order api', () => {
 
 	let orderId = '';
 
-	it.skip('should create order', async () => {
+	it('should create order', async () => {
 		try {
 			const res = await gogovan.createOrder(sampleCreateOrder);
 			console.log('create order', JSON.stringify(res, null, 2));
@@ -98,7 +109,7 @@ describe('order api', () => {
 
 	it('should get order status', async () => {
 		try {
-			const res = await gogovan.getOrderStatus(prevOrderId);
+			const res = await gogovan.getOrderStatus(orderId);
 			console.log('get order status', JSON.stringify(res, null, 2));
 			expect(res.id).toBe(parseInt(prevOrderId, 10));
 			expect(res.status).toBeDefined();
