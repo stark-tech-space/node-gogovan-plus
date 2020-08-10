@@ -18,7 +18,7 @@ const sampleGetPrice = {
 		['', '', '台灣台北市中山區松江路9號', '2樓'],
 		['', '', '台灣台北市中山區松江路9號', ''],
 	],
-	pickup_time: addMinutes(2000)(new Date()),
+	pickup_time: addMinutes(60)(new Date()),
 	vehicle: 'motorcycle' as 'motorcycle',
 };
 
@@ -42,7 +42,7 @@ const sampleCreateOrder = {
 	need_insulation_bags: false,
 	note: '',
 	phone_number: '+88622272399',
-	pickup_time: addMinutes(60 * 16)(new Date()),
+	pickup_time: addMinutes(60)(new Date()),
 	receiver_name: 'Frank Su Jhih Wei',
 	receiver_phone_number: '+886955940336',
 	vehicle: 'motorcycle' as 'motorcycle',
