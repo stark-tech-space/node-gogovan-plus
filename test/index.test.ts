@@ -15,7 +15,7 @@ const sampleGetPrice = {
 	carry: false,
 	locations: [
 		['', '', '台灣台北市中山區松江路9號', '2樓'],
-		['25.0463042', '121.5331887', '台灣台北市中山區松江路9號', ''],
+		['', '', '台灣台北市中山區松江路9號', ''],
 	],
 	pickup_time: addMinutes(2000)(new Date()),
 	vehicle: 'motorcycle' as 'motorcycle',
@@ -34,19 +34,8 @@ const sampleCreateOrder = {
 	},
 	is_bonus_first: false,
 	locations: [
-		[
-			/*'25.032987', '121.54508',*/ '',
-			'',
-			'台北市大安區敦化南路一段337號8樓',
-			'8F',
-		],
-		[
-			,
-			/*'25.0330787', '121.5450698',*/ '',
-			'',
-			'106台北市大安區信義路四段88號',
-			'8F',
-		],
+		['', '', '台灣台北市中山區松江路9號', '2樓'],
+		['', '', '台灣台北市中山區松江路9號', ''],
 	],
 	name: '法理歐',
 	need_insulation_bags: false,
@@ -61,7 +50,7 @@ const sampleCreateOrder = {
 const prevOrderId = '13791';
 
 describe('order api', () => {
-	it.skip('should get price', async () => {
+	it('should get price', async () => {
 		try {
 			const res = await gogovan.getPrice(sampleGetPrice);
 			console.log('get price', JSON.stringify(res, null, 2));
@@ -77,6 +66,7 @@ describe('order api', () => {
 	let orderId = '';
 
 	it('should create order', async () => {
+		jest.setTimeout(10000);
 		try {
 			const res = await gogovan.createOrder(sampleCreateOrder);
 			console.log('create order', JSON.stringify(res, null, 2));
@@ -111,7 +101,7 @@ describe('order api', () => {
 		try {
 			const res = await gogovan.getOrderStatus(orderId);
 			console.log('get order status', JSON.stringify(res, null, 2));
-			expect(res.id).toBe(parseInt(prevOrderId, 10));
+			expect(res.id).toBe(parseInt(orderId, 10));
 			expect(res.status).toBeDefined();
 			expect(res.name).toBeDefined();
 			expect(res.phone_number).toBeDefined();
