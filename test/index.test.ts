@@ -7,7 +7,8 @@ dotenv.config();
 const gogovan = new Gogovanplus(
 	process.env.API_EMAIL || '',
 	process.env.API_PASSWORD || '',
-	process.env.API_ENDPOINT || ''
+	process.env.API_ENDPOINT || '',
+	'Asia/Taipei'
 );
 
 const sampleGetPrice = {
@@ -41,7 +42,7 @@ const sampleCreateOrder = {
 	need_insulation_bags: false,
 	note: '',
 	phone_number: '+88622272399',
-	pickup_time: addMinutes(60)(new Date()),
+	pickup_time: addMinutes(60 * 16)(new Date()),
 	receiver_name: 'Frank Su Jhih Wei',
 	receiver_phone_number: '+886955940336',
 	vehicle: 'motorcycle' as 'motorcycle',
@@ -51,6 +52,7 @@ const prevOrderId = '13791';
 
 describe('order api', () => {
 	it('should get price', async () => {
+		jest.setTimeout(30000);
 		try {
 			const res = await gogovan.getPrice(sampleGetPrice);
 			console.log('get price', JSON.stringify(res, null, 2));

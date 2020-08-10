@@ -1,6 +1,7 @@
 import 'regenerator-runtime/runtime';
 import phin from 'phin';
 import format from 'date-fns/fp/format';
+import utcToZonedTime from 'date-fns-tz/fp/utcToZonedTime';
 
 type Vehicle = 'motorcycle' | 'struck' | 'mtruck';
 
@@ -187,10 +188,17 @@ export default class Gogovanplus {
 	private email: string;
 	private password: string;
 	private baseURL: string;
-	constructor(newEmail: string, newPassword: string, endpointURL: string) {
+	private timezone: string;
+	constructor(
+		newEmail: string,
+		newPassword: string,
+		endpointURL: string,
+		timezone: string = 'Asia/Taipei'
+	) {
 		this.email = newEmail;
 		this.password = newPassword;
 		this.baseURL = endpointURL;
+		this.timezone = timezone;
 	}
 
 	/*
@@ -218,7 +226,9 @@ export default class Gogovanplus {
 				order: {
 					booth: booth.toString(),
 					carry: carry.toString(),
-					pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
+					pickup_time: format('yyyy/MM/dd HH:mm')(
+						utcToZonedTime(this.timezone)(pickup_time)
+					),
 					...restParams,
 				},
 			},
@@ -261,7 +271,9 @@ export default class Gogovanplus {
 					booth: 'false',
 					carry: 'false',
 					need_insulation_bags: !!need_insulation_bags ? 'true' : 'false',
-					pickup_time: format('yyyy/MM/dd HH:mm')(pickup_time),
+					pickup_time: format('yyyy/MM/dd HH:mm')(
+						utcToZonedTime(this.timezone)(pickup_time)
+					),
 					...restParams,
 				},
 			},
