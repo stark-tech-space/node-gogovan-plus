@@ -49,7 +49,7 @@ const sampleCreateOrder = {
 
 const prevOrderId = '13791';
 
-describe.skip('order api', () => {
+describe('order api', () => {
 	it('should get price', async () => {
 		try {
 			const res = await gogovan.getPrice(sampleGetPrice);
@@ -66,7 +66,7 @@ describe.skip('order api', () => {
 	let orderId = '';
 
 	it('should create order', async () => {
-		jest.setTimeout(10000);
+		jest.setTimeout(30000);
 		try {
 			const res = await gogovan.createOrder(sampleCreateOrder);
 			console.log('create order', JSON.stringify(res, null, 2));
@@ -82,7 +82,8 @@ describe.skip('order api', () => {
 		}
 	});
 
-	it.skip('should cancel order', async () => {
+	it('should cancel order', async () => {
+		jest.setTimeout(30000);
 		const sampleCancel = {
 			action: 'cancel' as 'cancel',
 			order_id: orderId,
@@ -98,6 +99,7 @@ describe.skip('order api', () => {
 	});
 
 	it('should get order status', async () => {
+		jest.setTimeout(30000);
 		try {
 			const res = await gogovan.getOrderStatus(orderId);
 			console.log('get order status', JSON.stringify(res, null, 2));
@@ -112,7 +114,7 @@ describe.skip('order api', () => {
 	});
 });
 
-describe.skip('wallet api', () => {
+describe('wallet api', () => {
 	it('should get wallet balance', async () => {
 		try {
 			const res = await gogovan.getWalletBalance();
