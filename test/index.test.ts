@@ -49,7 +49,7 @@ const sampleCreateOrder = {
 
 const prevOrderId = '13791';
 
-describe('order api', () => {
+describe.skip('order api', () => {
 	it('should get price', async () => {
 		try {
 			const res = await gogovan.getPrice(sampleGetPrice);
@@ -112,7 +112,7 @@ describe('order api', () => {
 	});
 });
 
-describe('wallet api', () => {
+describe.skip('wallet api', () => {
 	it('should get wallet balance', async () => {
 		try {
 			const res = await gogovan.getWalletBalance();
